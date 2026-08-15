@@ -241,31 +241,65 @@ function drawGame(ctx: CanvasRenderingContext2D, game: Game) {
   if (game.shake > 0) ctx.translate((Math.random() - 0.5) * game.shake, (Math.random() - 0.5) * game.shake);
 
   const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, "#07111f");
-  bg.addColorStop(1, "#0b1d2d");
+  bg.addColorStop(0, "#03090f");
+  bg.addColorStop(0.55, "#071521");
+  bg.addColorStop(1, "#0a1c27");
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = "rgba(38, 239, 181, .06)";
-  for (let x = 0; x < W; x += 48) ctx.fillRect(x, 0, 1, H);
-  for (let y = 0; y < H; y += 48) ctx.fillRect(0, y, W, 1);
+  const ambient = ctx.createRadialGradient(640, 300, 30, 640, 330, 620);
+  ambient.addColorStop(0, "rgba(74, 255, 204, .1)");
+  ambient.addColorStop(0.48, "rgba(30, 99, 101, .04)");
+  ambient.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = ambient;
+  ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = "#101f31";
+  ctx.fillStyle = "#0d1b27";
   roundedRect(ctx, 110, 82, 1060, 580, 22);
   ctx.fill();
-  ctx.strokeStyle = "#29445c";
+  ctx.strokeStyle = "#234154";
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  ctx.fillStyle = "#0a1522";
+  ctx.fillStyle = "#07131e";
   ctx.fillRect(110, 82, 1060, 92);
+  ctx.fillStyle = "#39e6b0";
+  ctx.fillRect(110, 171, 1060, 3);
   drawText(ctx, "13", 150, 124, 38, "#42f5bb", "center", 900);
   drawText(ctx, "MART", 190, 123, 25, "#e8f7ff", "left", 900);
   drawText(ctx, "MỞ 24H • CAMERA 04", 1110, 123, 15, "#698197", "right", 800);
 
-  for (let x = 140; x < 1140; x += 46) {
-    ctx.fillStyle = (x / 46) % 2 > 1 ? "#15283b" : "#132438";
-    ctx.fillRect(x, 174, 46, 432);
+  const floor = ctx.createLinearGradient(0, 174, 0, 650);
+  floor.addColorStop(0, "#142839");
+  floor.addColorStop(1, "#0c1d2a");
+  ctx.fillStyle = floor;
+  ctx.fillRect(112, 174, 1056, 486);
+  ctx.strokeStyle = "rgba(93, 145, 164, .11)";
+  ctx.lineWidth = 1;
+  for (let y = 205; y < 650; y += 52) {
+    ctx.beginPath();
+    ctx.moveTo(112, y);
+    ctx.lineTo(1168, y);
+    ctx.stroke();
+  }
+  for (let x = 145; x < 1160; x += 74) {
+    ctx.beginPath();
+    ctx.moveTo(x, 174);
+    ctx.lineTo(640 + (x - 640) * 1.22, 660);
+    ctx.stroke();
+  }
+
+  for (const x of [275, 565, 855]) {
+    const glow = ctx.createRadialGradient(x, 192, 5, x, 240, 155);
+    glow.addColorStop(0, "rgba(210, 255, 242, .16)");
+    glow.addColorStop(1, "rgba(210, 255, 242, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(x - 180, 164, 360, 260);
+    ctx.fillStyle = "#c9f9ec";
+    ctx.globalAlpha = 0.7;
+    roundedRect(ctx, x - 58, 182, 116, 6, 3);
+    ctx.fill();
+    ctx.globalAlpha = 1;
   }
 
   const player = game.player;
@@ -336,6 +370,25 @@ function drawGame(ctx: CanvasRenderingContext2D, game: Game) {
     ctx.fillStyle = `rgba(255, 25, 73, ${game.flash * 0.45})`;
     ctx.fillRect(0, 0, W, H);
   }
+
+  const vignette = ctx.createRadialGradient(640, 360, 240, 640, 360, 710);
+  vignette.addColorStop(0, "rgba(0, 0, 0, 0)");
+  vignette.addColorStop(0.72, "rgba(0, 0, 0, .08)");
+  vignette.addColorStop(1, "rgba(0, 0, 0, .62)");
+  ctx.fillStyle = vignette;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.strokeStyle = "rgba(204, 255, 240, .48)";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([8, 7]);
+  ctx.strokeRect(30, 28, W - 60, H - 56);
+  ctx.setLineDash([]);
+  ctx.fillStyle = game.elapsed % 1 > 0.5 ? "#ff315e" : "#8d1935";
+  ctx.beginPath();
+  ctx.arc(57, 54, 6, 0, Math.PI * 2);
+  ctx.fill();
+  drawText(ctx, "REC  CAM-04", 72, 55, 13, "#d7ebe5", "left", 800);
+  drawText(ctx, `03:13:${String(Math.floor(game.elapsed) % 60).padStart(2, "0")}`, 1218, 666, 13, "#a9c2ba", "right", 700);
   ctx.restore();
 }
 
@@ -559,83 +612,132 @@ export default function Home() {
 
   return (
     <main className="site-shell">
+      <div className="ambient-orb orb-one" />
+      <div className="ambient-orb orb-two" />
+
       <header className="topbar">
         <a className="brand" href="#game" aria-label="Ca Đêm 13">
-          <span className="brand-mark">13</span>
-          <span>CA ĐÊM</span>
+          <span className="brand-mark"><i>13</i></span>
+          <span className="brand-copy"><b>CA ĐÊM</b><small>NIGHT SHIFT PROTOCOL</small></span>
         </a>
-        <div className="status-pill"><span /> PROTOTYPE 0.1</div>
-        <p>Horror shop simulator • Chơi ngay trên trình duyệt</p>
+        <div className="topbar-center"><span /> HỆ THỐNG ĐANG GHI HÌNH</div>
+        <div className="status-pill"><span /> BUILD 0.2</div>
       </header>
 
       <section className="hero" id="game">
-        <div className="eyebrow">90 GIÂY • 1 CA TRỰC • KHÔNG ĐƯỢC CHỚP MẮT</div>
-        <h1>Bán hàng. Tiếp kệ.<br /><em>Phát hiện kẻ không phải người.</em></h1>
-        <p className="lede">Một mini-game được thiết kế cho những cú la hét, pha xử lý phút chót và clip Shorts có câu chuyện trọn vẹn.</p>
-
-        <div className="game-card">
-          <div className="game-hud" aria-live="polite">
-            <div className="hud-item"><small>THỜI GIAN</small><strong className={hud.time <= 15 ? "danger" : ""}>{hud.time}s</strong></div>
-            <div className="hud-item"><small>DOANH THU</small><strong>{hud.money}K <i>/ {TARGET}K</i></strong></div>
-            <div className="hud-item power"><small>ĐIỆN</small><strong>{hud.power}%</strong><span><b style={{ width: `${hud.power}%` }} /></span></div>
-            <div className="hud-item"><small>UY TÍN</small><strong>{"♥".repeat(Math.max(0, hud.hearts))}<i>{"♥".repeat(Math.max(0, 3 - hud.hearts))}</i></strong></div>
-            <div className="hud-item combo"><small>COMBO</small><strong>×{hud.combo}</strong></div>
-          </div>
-
-          <div className="canvas-wrap">
-            <canvas ref={canvasRef} width={W} height={H} aria-label="Khu vực chơi game Ca Đêm 13" />
-
-            {phase === "intro" && (
-              <div className="game-overlay intro-overlay">
-                <div className="warning-tape">⚠ QUY TẮC CA ĐÊM #13</div>
-                <h2>Khách bình thường mua hàng.<br />Kẻ dị thường <span>nhìn thẳng vào bạn.</span></h2>
-                <div className="rules">
-                  <div><b>01</b><span>Tiếp hàng tại<br />3 kệ sản phẩm</span></div>
-                  <div><b>02</b><span>Tính tiền cho<br />khách bình thường</span></div>
-                  <div><b>03</b><span>Bấm báo động nếu<br />mắt khách phát đỏ</span></div>
-                </div>
-                <button className="start-button" onClick={startGame}>BẮT ĐẦU CA TRỰC <span>ENTER ↵</span></button>
-                <p>WASD / phím mũi tên để di chuyển • E hoặc Space để tương tác</p>
-              </div>
-            )}
-
-            {(phase === "won" || phase === "lost") && (
-              <div className={`game-overlay result-overlay ${phase}`}>
-                <div className="result-kicker">BÁO CÁO CA #13</div>
-                <h2>{phase === "won" ? "BẠN ĐÃ SỐNG SÓT." : "CỬA HÀNG ĐÃ MẤT KIỂM SOÁT."}</h2>
-                <p>{phase === "won" ? "Bình minh tới. Nhưng camera ghi nhận một nhân viên… giống hệt bạn." : "Đèn tắt lúc 03:13. Camera không tìm thấy nhân viên trực."}</p>
-                <div className="result-stats">
-                  <div><strong>{summary.money}K</strong><small>DOANH THU</small></div>
-                  <div><strong>{summary.served}</strong><small>KHÁCH PHỤC VỤ</small></div>
-                  <div><strong>{summary.caught}</strong><small>DỊ THƯỜNG BẮT ĐƯỢC</small></div>
-                  <div><strong>×{summary.bestCombo}</strong><small>COMBO CAO NHẤT</small></div>
-                </div>
-                <button className="start-button" onClick={startGame}>CHƠI LẠI <span>ENTER ↵</span></button>
-              </div>
-            )}
-          </div>
-
-          <div className="mobile-controls" aria-label="Điều khiển cảm ứng">
-            <div className="dpad">
-              <button aria-label="Đi lên" onPointerDown={() => setMove("w", true)} onPointerUp={() => setMove("w", false)} onPointerLeave={() => setMove("w", false)}>▲</button>
-              <button aria-label="Sang trái" onPointerDown={() => setMove("a", true)} onPointerUp={() => setMove("a", false)} onPointerLeave={() => setMove("a", false)}>◀</button>
-              <button aria-label="Đi xuống" onPointerDown={() => setMove("s", true)} onPointerUp={() => setMove("s", false)} onPointerLeave={() => setMove("s", false)}>▼</button>
-              <button aria-label="Sang phải" onPointerDown={() => setMove("d", true)} onPointerUp={() => setMove("d", false)} onPointerLeave={() => setMove("d", false)}>▶</button>
+        <div className="hero-intro">
+          <div className="hero-copy">
+            <div className="eyebrow"><span>CASE FILE / 013</span><i>HORROR SHOP SIMULATOR</i></div>
+            <h1>Đừng phục vụ<br /><em>kẻ không phải người.</em></h1>
+            <p className="lede">Ca trực 90 giây tại cửa hàng cuối phố. Bán hàng, tiếp kệ và nhìn thật kỹ từng vị khách trước khi bấm máy tính tiền.</p>
+            <div className="hero-actions">
+              <button className="hero-play" onClick={startGame}>CHƠI NGAY <span>↘</span></button>
+              <div className="control-hint"><kbd>WASD</kbd><span>DI CHUYỂN</span><kbd>E</kbd><span>TƯƠNG TÁC</span></div>
             </div>
-            <button className="action-touch" onClick={act}>E<small>TƯƠNG TÁC</small></button>
+          </div>
+          <aside className="shift-card">
+            <div className="shift-card-head"><span>THẺ NHÂN VIÊN</span><b>#013</b></div>
+            <div className="shift-time">03<span>:</span>13<small>AM</small></div>
+            <div className="shift-grid"><div><small>CA TRỰC</small><strong>90 GIÂY</strong></div><div><small>MỤC TIÊU</small><strong>120K</strong></div></div>
+            <div className="shift-warning"><i /> KHÔNG RỜI MẮT KHỎI CAMERA 04</div>
+          </aside>
+        </div>
+
+        <div className="game-stage">
+          <div className="stage-tag">LIVE GAMEPLAY</div>
+          <div className="game-card">
+            <div className="monitor-bar">
+              <div className="monitor-lights"><i /><i /><i /></div>
+              <span>SECURITY TERMINAL · CHANNEL 04</span>
+              <b><i /> REC</b>
+            </div>
+
+            <div className="game-hud" aria-live="polite">
+              <div className="hud-item time"><small>THỜI GIAN</small><strong className={hud.time <= 15 ? "danger" : ""}>{String(hud.time).padStart(2, "0")}<i>SEC</i></strong></div>
+              <div className="hud-item revenue"><small>DOANH THU / MỤC TIÊU</small><strong>{hud.money}<i>K / {TARGET}K</i></strong></div>
+              <div className="hud-item power"><small>NGUỒN ĐIỆN</small><strong>{hud.power}<i>%</i></strong><span><b style={{ width: `${hud.power}%` }} /></span></div>
+              <div className="hud-item reputation"><small>UY TÍN</small><strong>{Array.from({ length: 3 }, (_, i) => <i key={i} className={i < hud.hearts ? "active" : ""}>♥</i>)}</strong></div>
+              <div className="hud-item combo"><small>COMBO</small><strong>×{hud.combo}</strong></div>
+            </div>
+
+            <div className="canvas-wrap">
+              <canvas ref={canvasRef} width={W} height={H} aria-label="Khu vực chơi game Ca Đêm 13" />
+              <div className="screen-glass" aria-hidden="true"><i /><i /><i /><i /></div>
+
+              {phase === "intro" && (
+                <div className="game-overlay intro-overlay">
+                  <div className="briefing-panel">
+                    <div className="anomaly-portrait" aria-hidden="true">
+                      <div className="portrait-noise" />
+                      <div className="portrait-head"><i /><i /></div>
+                      <span>SUBJECT / UNKNOWN</span>
+                    </div>
+                    <div className="briefing-copy">
+                      <div className="warning-tape"><span>!</span> QUY TẮC CA ĐÊM #13</div>
+                      <h2>Khách bình thường mua hàng.<br />Dị thường <em>nhìn thẳng vào bạn.</em></h2>
+                      <div className="rules">
+                        <div><b>01</b><span><strong>TIẾP KỆ</strong>Giữ đủ hàng hóa</span></div>
+                        <div><b>02</b><span><strong>TÍNH TIỀN</strong>Phục vụ khách thật</span></div>
+                        <div><b>03</b><span><strong>BÁO ĐỘNG</strong>Loại kẻ mắt đỏ</span></div>
+                      </div>
+                      <button className="start-button" onClick={startGame}>BẮT ĐẦU CA TRỰC <span>ENTER ↵</span></button>
+                      <p>WASD / phím mũi tên để di chuyển · E hoặc Space để tương tác</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {(phase === "won" || phase === "lost") && (
+                <div className={`game-overlay result-overlay ${phase}`}>
+                  <div className="case-stamp">{phase === "won" ? "SURVIVED" : "LOST SIGNAL"}</div>
+                  <div className="result-kicker">BÁO CÁO CA #13 · 03:13 AM</div>
+                  <h2>{phase === "won" ? "BẠN ĐÃ SỐNG SÓT." : "CỬA HÀNG ĐÃ MẤT KIỂM SOÁT."}</h2>
+                  <p>{phase === "won" ? "Bình minh tới. Nhưng camera ghi nhận một nhân viên… giống hệt bạn." : "Đèn tắt lúc 03:13. Camera không tìm thấy nhân viên trực."}</p>
+                  <div className="result-stats">
+                    <div><strong>{summary.money}K</strong><small>DOANH THU</small></div>
+                    <div><strong>{summary.served}</strong><small>KHÁCH PHỤC VỤ</small></div>
+                    <div><strong>{summary.caught}</strong><small>DỊ THƯỜNG</small></div>
+                    <div><strong>×{summary.bestCombo}</strong><small>BEST COMBO</small></div>
+                  </div>
+                  <button className="start-button" onClick={startGame}>CHƠI LẠI <span>ENTER ↵</span></button>
+                </div>
+              )}
+            </div>
+
+            <div className="desktop-controls">
+              <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>DI CHUYỂN NHÂN VIÊN</span></div>
+              <div><kbd>E</kbd><span>TIẾP KỆ · TÍNH TIỀN · BÁO ĐỘNG</span></div>
+              <p><i /> MẸO: DỊ THƯỜNG CÓ MẮT ĐỎ VÀ HÌNH ẢNH NHIỄU</p>
+            </div>
+
+            <div className="mobile-controls" aria-label="Điều khiển cảm ứng">
+              <div className="dpad">
+                <button aria-label="Đi lên" onPointerDown={() => setMove("w", true)} onPointerUp={() => setMove("w", false)} onPointerLeave={() => setMove("w", false)}>▲</button>
+                <button aria-label="Sang trái" onPointerDown={() => setMove("a", true)} onPointerUp={() => setMove("a", false)} onPointerLeave={() => setMove("a", false)}>◀</button>
+                <button aria-label="Đi xuống" onPointerDown={() => setMove("s", true)} onPointerUp={() => setMove("s", false)} onPointerLeave={() => setMove("s", false)}>▼</button>
+                <button aria-label="Sang phải" onPointerDown={() => setMove("d", true)} onPointerUp={() => setMove("d", false)} onPointerLeave={() => setMove("d", false)}>▶</button>
+              </div>
+              <button className="action-touch" onClick={act}>E<small>TƯƠNG TÁC</small></button>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="creator-strip" aria-label="Điểm nổi bật">
-        <div><span>01</span><strong>Hook trong 3 giây</strong><p>Người xem hiểu ngay: khách nào là quái vật?</p></div>
-        <div><span>02</span><strong>Run 90 giây</strong><p>Vừa một Short, cũng vừa một màn speedrun.</p></div>
-        <div><span>03</span><strong>Mỗi lượt khác nhau</strong><p>Nhịp khách và dị thường được tạo ngẫu nhiên.</p></div>
+      <div className="signal-strip" aria-hidden="true"><span>CA ĐÊM 13</span><i /> KHÁCH BÌNH THƯỜNG KHÔNG NHÌN VÀO CAMERA <i /> DO NOT TRUST THE RED EYES <i /> CAMERA 04</div>
+
+      <section className="creator-section" aria-label="Điểm nổi bật">
+        <div className="section-heading"><span>DESIGNED FOR REACTIONS</span><h2>Một lượt chơi.<br />Một câu chuyện để kể.</h2></div>
+        <div className="creator-grid">
+          <article><span>01 / HOOK</span><b>◉</b><h3>Hiểu trong 3 giây</h3><p>Luật chơi trực quan: nhìn khách, phát hiện mắt đỏ, quyết định trước khi quá muộn.</p></article>
+          <article><span>02 / FORMAT</span><b>90</b><h3>Vừa khít một Short</h3><p>Mỗi ca trực kéo dài 90 giây với mở đầu, cao trào và kết quả rõ ràng.</p></article>
+          <article><span>03 / REPLAY</span><b>∞</b><h3>Không ca nào giống nhau</h3><p>Nhịp khách, hàng hóa và dị thường thay đổi ngẫu nhiên sau mỗi lượt chơi.</p></article>
+        </div>
       </section>
 
       <footer>
-        <strong>CA ĐÊM 13</strong>
-        <p>Concept prototype dựa trên nghiên cứu thị trường game dành cho YouTube • 2026</p>
+        <a className="brand footer-brand" href="#game"><span className="brand-mark"><i>13</i></span><span className="brand-copy"><b>CA ĐÊM</b><small>NIGHT SHIFT PROTOCOL</small></span></a>
+        <p>Horror shop simulator · Prototype 2026</p>
+        <a href="#game">TRỞ LẠI CAMERA 04 ↑</a>
       </footer>
     </main>
   );
