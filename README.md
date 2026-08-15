@@ -1,30 +1,38 @@
-# CA ĐÊM 13
+# Ấn Phong 13
 
-Mini horror shop simulator chạy trực tiếp trên trình duyệt. Người chơi có 90 giây để tiếp hàng, tính tiền cho khách bình thường và báo cáo những vị khách dị thường trước khi cửa hàng mất điện.
+**Ấn Phong 13** is a short, mobile-friendly horror tracing game for the web. Players have 12 seconds to trace each supernatural sigil as accurately as possible and seal five entities before the night shift ends.
 
-## Điều khiển
+## Play
 
-- Di chuyển: `WASD` hoặc phím mũi tên
-- Tương tác: `E` hoặc `Space`
-- Chơi lại: `Enter`
-- Điện thoại: cụm phím cảm ứng bên dưới game
+- Public demo: https://ca-dem-13.khanh-forget5.chatgpt.site
+- Input: mouse, trackpad, stylus, or touch
+- Session length: about 60–90 seconds
+- No login, installation, advertising, or in-app purchases
+- The game stores only the device-local high score and does not collect personal data
 
-## Chạy local
+## Gameplay
 
-Yêu cầu Node.js `>=22.13.0`.
+1. Start at the glowing point.
+2. Trace the complete sigil with one continuous stroke.
+3. Accuracy, path coverage, and remaining time determine the score.
+4. Reach at least 78% accuracy to preserve the sealing combo.
+5. Complete five sigils and replay to beat the local high score.
+
+## Local development
+
+Requires Node.js 22.13 or newer.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Mở `http://localhost:3000`.
-
-## Kiểm tra bản dựng
+## Validation
 
 ```bash
-npm run build
 npm test
+npm run lint
+npm run build:pages
 ```
 
-Phân tích 10 niche và nguồn YouTube nằm trong [`MARKET_RESEARCH.md`](./MARKET_RESEARCH.md).
+The GitHub Pages workflow publishes the static build from `github-pages/` whenever the `main` branch is updated.

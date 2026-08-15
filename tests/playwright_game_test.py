@@ -1,10 +1,13 @@
 from pathlib import Path
+import os
 import sys
 import tempfile
 from playwright.sync_api import sync_playwright
 
 
 ARTIFACT = Path(tempfile.gettempdir()) / "an-phong-13-qa.png"
+MOBILE_ARTIFACT = Path(tempfile.gettempdir()) / "an-phong-13-mobile-qa.png"
+GAME_URL = os.environ.get("GAME_URL", "http://localhost:3000")
 sys.stdout.reconfigure(encoding="utf-8")
 
 
@@ -16,7 +19,7 @@ with sync_playwright() as playwright:
     page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
     page.on("pageerror", lambda error: page_errors.append(str(error)))
 
-    page.goto("http://localhost:3000", wait_until="networkidle")
+    page.goto(GAME_URL, wait_until="networkidle")
     assert page.title() == "Ấn Phong 13 — Horror Tracing Challenge"
     page.get_by_role("button", name="BẮT ĐẦU PHONG ẤN").click()
     page.get_by_text("ẤN CHÚ 01").wait_for()
@@ -49,4 +52,19 @@ with sync_playwright() as playwright:
     assert not console_errors, console_errors
     print(result_text.replace("\n", " | "))
     print(f"Screenshot: {ARTIFACT}")
+
+    mobile = browser.new_page(
+        viewport={"width": 390, "height": 844},
+        device_scale_factor=2,
+        is_mobile=True,
+        has_touch=True,
+    )
+    mobile.goto(GAME_URL, wait_until="networkidle")
+    mobile.get_by_role("button", name="BẮT ĐẦU PHONG ẤN").click()
+    mobile.get_by_text("ẤN CHÚ 01").wait_for()
+    dimensions = mobile.evaluate("({ width: document.documentElement.scrollWidth, viewport: innerWidth })")
+    assert dimensions["width"] <= dimensions["viewport"], dimensions
+    mobile.screenshot(path=str(MOBILE_ARTIFACT), full_page=True)
+    print(f"Mobile screenshot: {MOBILE_ARTIFACT}")
+    mobile.close()
     browser.close()
