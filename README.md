@@ -35,4 +35,4 @@ npm run lint
 npm run build:pages
 ```
 
-The GitHub Pages workflow publishes the static build from `github-pages/` whenever the `main` branch is updated.
+The deployable GitHub Pages build is committed in `docs/`. In repository settings, select **Deploy from a branch**, branch `main`, folder `/docs`.
