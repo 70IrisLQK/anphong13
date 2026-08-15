@@ -17,9 +17,9 @@ test("server-renders the An Phong 13 game shell", async () => {
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
-  assert.match(html, /<title>Ấn Phong 13 — Horror Tracing Challenge<\/title>/i);
-  assert.match(html, /ẤN PHONG/);
-  assert.match(html, /BẮT ĐẦU PHONG ẤN/);
-  assert.match(html, /VẼ ẤN/);
+  assert.match(html, /<title>An Phong 13 — Horror Tracing Challenge<\/title>/i);
+  assert.match(html, /AN PHONG/);
+  assert.match(html, /START SEALING/);
+  assert.match(html, /TRACE THE SIGIL/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });

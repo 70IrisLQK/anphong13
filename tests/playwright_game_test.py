@@ -20,9 +20,9 @@ with sync_playwright() as playwright:
     page.on("pageerror", lambda error: page_errors.append(str(error)))
 
     page.goto(GAME_URL, wait_until="networkidle")
-    assert page.title() == "Ấn Phong 13 — Horror Tracing Challenge"
-    page.get_by_role("button", name="BẮT ĐẦU PHONG ẤN").click()
-    page.get_by_text("ẤN CHÚ 01").wait_for()
+    assert page.title() == "An Phong 13 — Horror Tracing Challenge"
+    page.get_by_role("button", name="START SEALING").click()
+    page.get_by_text("SIGIL 01").wait_for()
 
     canvas = page.locator("canvas")
     box = canvas.bounding_box()
@@ -41,11 +41,11 @@ with sync_playwright() as playwright:
         page.mouse.move(box["x"] + x * scale_x, box["y"] + y * scale_y, steps=12)
     page.mouse.up()
 
-    page.get_by_text("KẾT QUẢ ẤN 01").wait_for()
+    page.get_by_text("SIGIL 01 RESULT").wait_for()
     result_text = page.locator(".result-card").inner_text()
-    assert "CHÍNH XÁC" in result_text
-    page.get_by_role("button", name="ẤN CHÚ TIẾP THEO").click()
-    page.get_by_text("ẤN CHÚ 02").wait_for()
+    assert "ACCURACY" in result_text
+    page.get_by_role("button", name="NEXT SIGIL").click()
+    page.get_by_text("SIGIL 02").wait_for()
     page.screenshot(path=str(ARTIFACT), full_page=True)
 
     assert not page_errors, page_errors
@@ -60,8 +60,8 @@ with sync_playwright() as playwright:
         has_touch=True,
     )
     mobile.goto(GAME_URL, wait_until="networkidle")
-    mobile.get_by_role("button", name="BẮT ĐẦU PHONG ẤN").click()
-    mobile.get_by_text("ẤN CHÚ 01").wait_for()
+    mobile.get_by_role("button", name="START SEALING").click()
+    mobile.get_by_text("SIGIL 01").wait_for()
     dimensions = mobile.evaluate("({ width: document.documentElement.scrollWidth, viewport: innerWidth })")
     assert dimensions["width"] <= dimensions["viewport"], dimensions
     mobile.screenshot(path=str(MOBILE_ARTIFACT), full_page=True)

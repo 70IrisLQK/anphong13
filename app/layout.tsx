@@ -6,24 +6,24 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin", "lat
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin", "latin-ext"] });
 
 export const metadata: Metadata = {
-  title: "Ấn Phong 13 — Horror Tracing Challenge",
-  description: "Đồ 5 ấn chú trước khi đồng hồ về 0. Chấm điểm theo độ chính xác, độ phủ và tốc độ.",
+  title: "An Phong 13 — Horror Tracing Challenge",
+  description: "Trace five supernatural sigils before time runs out. Scored by accuracy, coverage, and speed.",
   metadataBase: new URL("https://ca-dem-13.khanh-forget5.chatgpt.site"),
   openGraph: {
-    title: "Ấn Phong 13 — Vẽ ấn. Khóa dị thể.",
-    description: "Một nét, 12 giây, không được run tay.",
+    title: "An Phong 13 — Trace. Seal. Survive.",
+    description: "One stroke. Twelve seconds. Seal the entity.",
     type: "website",
-    locale: "vi_VN",
-    images: [{ url: "/og.png", width: 1536, height: 1024, alt: "Ấn Phong 13" }],
+    locale: "en_US",
+    images: [{ url: "/og.png", width: 1536, height: 1024, alt: "An Phong 13" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ấn Phong 13",
-    description: "Một nét, 12 giây, không được run tay.",
+    title: "An Phong 13",
+    description: "One stroke. Twelve seconds. Seal the entity.",
     images: ["/og.png"],
   },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="vi"><body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body></html>;
+  return <html lang="en"><body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body></html>;
 }

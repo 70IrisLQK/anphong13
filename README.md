@@ -1,6 +1,6 @@
-# Ấn Phong 13
+# An Phong 13
 
-**Ấn Phong 13** is a short, mobile-friendly horror tracing game for the web. Players have 12 seconds to trace each supernatural sigil as accurately as possible and seal five entities before the night shift ends.
+**An Phong 13** is a short, mobile-friendly horror tracing game for the web. Players have 12 seconds to trace each supernatural sigil as accurately as possible and seal five entities before the night shift ends.
 
 ## Play
 

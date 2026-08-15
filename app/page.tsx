@@ -27,9 +27,9 @@ const TOTAL_ROUNDS = 5;
 
 const SIGILS: Sigil[] = [
   {
-    name: "MẮT THỨ MƯỜI BA",
-    entity: "KẺ NHÌN TRỘM",
-    warning: "Đừng rời nét khỏi mí mắt.",
+    name: "THIRTEENTH EYE",
+    entity: "THE WATCHER",
+    warning: "Stay inside the eyelid.",
     closed: true,
     path: [
       { x: 125, y: 320 }, { x: 180, y: 258 }, { x: 252, y: 222 }, { x: 320, y: 214 },
@@ -38,18 +38,18 @@ const SIGILS: Sigil[] = [
     ],
   },
   {
-    name: "TAM GIÁC CÂM",
-    entity: "KẺ GÕ CỬA",
-    warning: "Khép kín ba góc trước tiếng gõ thứ ba.",
+    name: "SILENT TRIANGLE",
+    entity: "THE KNOCKER",
+    warning: "Close all three corners before the third knock.",
     closed: true,
     path: [
       { x: 320, y: 128 }, { x: 505, y: 452 }, { x: 135, y: 452 },
     ],
   },
   {
-    name: "MÓC NGƯỢC",
-    entity: "BÓNG DƯỚI KỆ",
-    warning: "Bắt đầu từ đỉnh. Không được quay đầu.",
+    name: "INVERTED HOOK",
+    entity: "SHADOW BENEATH",
+    warning: "Start at the top. Never turn back.",
     path: [
       { x: 222, y: 164 }, { x: 278, y: 132 }, { x: 354, y: 142 }, { x: 411, y: 190 },
       { x: 430, y: 255 }, { x: 409, y: 316 }, { x: 359, y: 356 }, { x: 295, y: 374 },
@@ -57,9 +57,9 @@ const SIGILS: Sigil[] = [
     ],
   },
   {
-    name: "RĂNG KHÓA",
-    entity: "KẺ KHÔNG MẶT",
-    warning: "Một nét. Sáu răng. Không do dự.",
+    name: "LOCKING TEETH",
+    entity: "THE FACELESS",
+    warning: "One stroke. Six teeth. No hesitation.",
     path: [
       { x: 155, y: 230 }, { x: 228, y: 180 }, { x: 320, y: 210 }, { x: 412, y: 180 },
       { x: 485, y: 230 }, { x: 450, y: 320 }, { x: 485, y: 410 }, { x: 410, y: 460 },
@@ -68,9 +68,9 @@ const SIGILS: Sigil[] = [
     closed: true,
   },
   {
-    name: "XOẮN TRỤC",
-    entity: "TIẾNG THỞ SAU LƯNG",
-    warning: "Đi theo vòng xoắn vào tâm.",
+    name: "AXIS SPIRAL",
+    entity: "BREATH BEHIND YOU",
+    warning: "Follow the spiral into its core.",
     path: [
       { x: 166, y: 252 }, { x: 205, y: 190 }, { x: 275, y: 153 }, { x: 358, y: 156 },
       { x: 433, y: 198 }, { x: 478, y: 270 }, { x: 484, y: 350 }, { x: 449, y: 421 },
@@ -81,9 +81,9 @@ const SIGILS: Sigil[] = [
     ],
   },
   {
-    name: "CỔNG GÃY",
-    entity: "NGƯỜI KHÁCH CUỐI",
-    warning: "Nối hai trụ trước khi đèn tắt.",
+    name: "BROKEN GATE",
+    entity: "THE LAST CUSTOMER",
+    warning: "Connect both pillars before the lights go out.",
     path: [
       { x: 170, y: 474 }, { x: 170, y: 195 }, { x: 240, y: 154 }, { x: 320, y: 194 },
       { x: 400, y: 154 }, { x: 470, y: 195 }, { x: 470, y: 474 }, { x: 395, y: 474 },
@@ -125,7 +125,7 @@ function nearestDistance(point: Point, cloud: Point[]) {
 
 function scoreTrace(sigil: Sigil, trace: Point[], timeLeft: number): RoundResult {
   if (trace.length < 5) {
-    return { accuracy: 0, coverage: 0, speedBonus: 0, points: 0, verdict: "ẤN CHƯA THÀNH HÌNH" };
+    return { accuracy: 0, coverage: 0, speedBonus: 0, points: 0, verdict: "SIGIL INCOMPLETE" };
   }
   const target = samplePath(sigil);
   const traceCloud = trace.filter((_, index) => index % 2 === 0);
@@ -135,7 +135,7 @@ function scoreTrace(sigil: Sigil, trace: Point[], timeLeft: number): RoundResult
   const accuracy = Math.round(precision * 0.46 + coverage * 0.54);
   const speedBonus = accuracy >= 55 ? Math.round(timeLeft * 18) : 0;
   const points = Math.round(accuracy * 10 + speedBonus);
-  const verdict = accuracy >= 92 ? "PHONG ẤN HOÀN HẢO" : accuracy >= 78 ? "DỊ THỂ ĐÃ BỊ KHÓA" : accuracy >= 55 ? "ẤN YẾU — NHƯNG CÓ HIỆU LỰC" : "DỊ THỂ ĐÃ THOÁT";
+  const verdict = accuracy >= 92 ? "PERFECT SEAL" : accuracy >= 78 ? "ENTITY CONTAINED" : accuracy >= 55 ? "WEAK SEAL — BUT IT HELD" : "ENTITY ESCAPED";
   return { accuracy, coverage: Math.round(coverage), speedBonus, points, verdict };
 }
 
@@ -414,37 +414,37 @@ export default function Home() {
     <main className="game-shell">
       <div className="noise" aria-hidden="true" />
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="Ấn Phong 13">
+        <a className="brand" href="#top" aria-label="An Phong 13">
           <span className="brand-mark">13</span>
-          <span><b>ẤN PHONG</b><small>NIGHT PROTOCOL</small></span>
+          <span><b>AN PHONG</b><small>NIGHT PROTOCOL</small></span>
         </a>
-        <div className="top-stats" aria-label="Thông tin lượt chơi">
-          <div><span>ĐIỂM</span><strong>{score.toLocaleString("vi-VN")}</strong></div>
-          <div><span>KỶ LỤC</span><strong>{best.toLocaleString("vi-VN")}</strong></div>
+        <div className="top-stats" aria-label="Run information">
+          <div><span>SCORE</span><strong>{score.toLocaleString("en-US")}</strong></div>
+          <div><span>BEST</span><strong>{best.toLocaleString("en-US")}</strong></div>
           <div className="live"><i /> CAMERA 13</div>
         </div>
       </header>
 
       <section className="play-layout" id="top">
         <aside className="mission-panel">
-          <div className="eyebrow"><i /> HỒ SƠ DỊ THỂ</div>
+          <div className="eyebrow"><i /> ENTITY FILE</div>
           <div className="entity-portrait" aria-hidden="true">
             <div className="portrait-ring" /><div className="entity-head"><i /><i /></div>
             <span>NO SIGNAL</span>
           </div>
-          <p className="entity-label">MỤC TIÊU HIỆN TẠI</p>
+          <p className="entity-label">CURRENT TARGET</p>
           <h2>{sigil.entity}</h2>
           <p className="warning">“{sigil.warning}”</p>
           <div className="protocol">
-            <span>QUY TRÌNH</span>
-            <ol><li>Chạm điểm sáng</li><li>Đồ theo đường ấn</li><li>Khép nét trước 0:00</li></ol>
+            <span>PROTOCOL</span>
+            <ol><li>Touch the glowing point</li><li>Trace the entire sigil</li><li>Close before 0:00</li></ol>
           </div>
         </aside>
 
-        <section className="game-stage" aria-label="Khu vực vẽ ấn">
+        <section className="game-stage" aria-label="Sigil tracing area">
           <div className="stage-head">
-            <div><span>ẤN CHÚ 0{round + 1}</span><h1>{sigil.name}</h1></div>
-            <div className="round-pips" aria-label={`Vòng ${round + 1} trên ${TOTAL_ROUNDS}`}>
+            <div><span>SIGIL 0{round + 1}</span><h1>{sigil.name}</h1></div>
+            <div className="round-pips" aria-label={`Round ${round + 1} of ${TOTAL_ROUNDS}`}>
               {Array.from({ length: TOTAL_ROUNDS }, (_, index) => <i key={index} className={index < round ? "done" : index === round ? "active" : ""} />)}
             </div>
           </div>
@@ -458,70 +458,70 @@ export default function Home() {
               onPointerMove={pointerMove}
               onPointerUp={pointerUp}
               onPointerCancel={() => { drawingRef.current = false; }}
-              aria-label="Kéo chuột hoặc ngón tay theo đường ấn chú"
+              aria-label="Trace the sigil with your mouse or finger"
             />
             {phase === "intro" && (
               <div className="overlay intro-card">
                 <span className="seal-icon">13</span>
-                <p className="kicker">CA TRỰC 03:13</p>
-                <h2>VẼ ẤN.<br />KHÓA DỊ THỂ.</h2>
-                <p>5 ấn chú · 12 giây mỗi ấn · chỉ cần một nét</p>
-                <button className="primary-button" onClick={startRun}>BẮT ĐẦU PHONG ẤN <b>↗</b></button>
-                <small>ENTER ĐỂ CHƠI · HỖ TRỢ CHẠM</small>
+                <p className="kicker">NIGHT SHIFT 03:13</p>
+                <h2>TRACE THE SIGIL.<br />SEAL THE ENTITY.</h2>
+                <p>5 sigils · 12 seconds each · one continuous stroke</p>
+                <button className="primary-button" onClick={startRun}>START SEALING <b>↗</b></button>
+                <small>ENTER TO PLAY · TOUCH ENABLED</small>
               </div>
             )}
             {phase === "feedback" && result && (
               <div className={`overlay result-card ${result.accuracy < 55 ? "failed" : ""}`}>
-                <span className="result-tag">KẾT QUẢ ẤN 0{round + 1}</span>
+                <span className="result-tag">SIGIL 0{round + 1} RESULT</span>
                 <div className="accuracy-ring" style={{ "--accuracy": `${result.accuracy * 3.6}deg` } as React.CSSProperties}>
-                  <strong>{result.accuracy}<small>%</small></strong><span>CHÍNH XÁC</span>
+                  <strong>{result.accuracy}<small>%</small></strong><span>ACCURACY</span>
                 </div>
                 <h2>{result.verdict}</h2>
-                <div className="result-breakdown"><span>Độ phủ <b>{result.coverage}%</b></span><span>Tốc độ <b>+{result.speedBonus}</b></span><span>Điểm <b>+{result.points}</b></span></div>
-                <button className="primary-button" onClick={nextRound}>{round === TOTAL_ROUNDS - 1 ? "XEM HỒ SƠ CA TRỰC" : "ẤN CHÚ TIẾP THEO"} <b>↗</b></button>
+                <div className="result-breakdown"><span>Coverage <b>{result.coverage}%</b></span><span>Speed <b>+{result.speedBonus}</b></span><span>Score <b>+{result.points}</b></span></div>
+                <button className="primary-button" onClick={nextRound}>{round === TOTAL_ROUNDS - 1 ? "VIEW SHIFT REPORT" : "NEXT SIGIL"} <b>↗</b></button>
               </div>
             )}
             {phase === "finished" && (
               <div className="overlay final-card">
-                <span className="result-tag">CA TRỰC HOÀN TẤT</span>
+                <span className="result-tag">SHIFT COMPLETE</span>
                 <p className="final-grade">{averageAccuracy >= 90 ? "S" : averageAccuracy >= 78 ? "A" : averageAccuracy >= 60 ? "B" : "C"}</p>
-                <h2>{score.toLocaleString("vi-VN")} ĐIỂM</h2>
-                <p>{score >= best && score > 0 ? "KỶ LỤC MỚI ĐÃ ĐƯỢC GHI NHẬN" : "HỒ SƠ ĐÃ ĐƯỢC LƯU"}</p>
-                <div className="final-stats"><span>Chính xác TB <b>{averageAccuracy}%</b></span><span>Ấn hoàn hảo <b>{perfects}/{TOTAL_ROUNDS}</b></span></div>
-                <button className="primary-button" onClick={startRun}>CHƠI LẠI · PHÁ KỶ LỤC <b>↻</b></button>
+                <h2>{score.toLocaleString("en-US")} POINTS</h2>
+                <p>{score >= best && score > 0 ? "NEW HIGH SCORE RECORDED" : "SHIFT REPORT SAVED"}</p>
+                <div className="final-stats"><span>Average accuracy <b>{averageAccuracy}%</b></span><span>Perfect seals <b>{perfects}/{TOTAL_ROUNDS}</b></span></div>
+                <button className="primary-button" onClick={startRun}>PLAY AGAIN · BEAT YOUR BEST <b>↻</b></button>
               </div>
             )}
           </div>
 
           <div className="stage-footer">
-            <button className="ghost-button" onClick={clearTrace} disabled={phase !== "playing"}>↺ VẼ LẠI <kbd>R</kbd></button>
-            <p><i /> Giữ nét trong hành lang phát sáng để tăng độ chính xác</p>
+            <button className="ghost-button" onClick={clearTrace} disabled={phase !== "playing"}>↺ REDRAW <kbd>R</kbd></button>
+            <p><i /> Stay inside the glowing path to improve accuracy</p>
           </div>
         </section>
 
         <aside className="status-panel">
           <div className="timer-card">
-            <span>THỜI GIAN CÒN LẠI</span>
+            <span>TIME REMAINING</span>
             <strong className={timeLeft <= 3 && phase === "playing" ? "danger" : ""}>00:{Math.ceil(timeLeft).toString().padStart(2, "0")}</strong>
             <div className="timer-track"><i style={{ width: `${dangerPercent}%` }} /></div>
           </div>
           <div className="score-card">
-            <span>CHUỖI PHONG ẤN</span>
+            <span>SEAL STREAK</span>
             <strong>×{combo}</strong>
-            <p>{combo >= 3 ? "Năng lượng đang cộng hưởng" : "Đạt 78% để giữ chuỗi"}</p>
+            <p>{combo >= 3 ? "The energy is resonating" : "Reach 78% to preserve the streak"}</p>
           </div>
           <div className="round-list">
-            <span>TIẾN TRÌNH CA TRỰC</span>
+            <span>SHIFT PROGRESS</span>
             {sigils.map((item, index) => (
               <div key={item.name} className={index < round ? "done" : index === round ? "current" : ""}>
-                <i>{index < round ? "✓" : index + 1}</i><p><b>{item.name}</b><small>{index < round ? `${runResults[index]?.accuracy ?? 0}% chính xác` : index === round ? "Đang xử lý" : "Đã mã hóa"}</small></p>
+                <i>{index < round ? "✓" : index + 1}</i><p><b>{item.name}</b><small>{index < round ? `${runResults[index]?.accuracy ?? 0}% accuracy` : index === round ? "In progress" : "Encrypted"}</small></p>
               </div>
             ))}
           </div>
         </aside>
       </section>
 
-      <footer><span>PROTOCOL 13.3</span><p>DI CHUYỂN MỘT NÉT · PHẢN HỒI TỨC THÌ · CHƠI LẠI PHÁ KỶ LỤC</p><span>ÂM THANH: AUTO</span></footer>
+      <footer><span>PROTOCOL 13.3</span><p>ONE STROKE · INSTANT FEEDBACK · REPLAY FOR A HIGH SCORE</p><span>SOUND: AUTO</span></footer>
     </main>
   );
 }
