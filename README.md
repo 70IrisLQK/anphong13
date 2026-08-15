@@ -4,7 +4,8 @@
 
 ## Play
 
-- Public demo: https://ca-dem-13.khanh-forget5.chatgpt.site
+- GitHub Pages: https://70irislqk.github.io/anphong13/
+- Backup demo: https://ca-dem-13.khanh-forget5.chatgpt.site
 - Input: mouse, trackpad, stylus, or touch
 - Session length: about 60–90 seconds
 - No login, installation, advertising, or in-app purchases
